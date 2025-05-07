@@ -42,3 +42,4 @@ export const fileRelations = relations(files,({one, many}) => ({
 }))
 
 export const File = typeof files.$inferSelect //is to handled the types 'so we don't need to write the types '
+export const NewFile = typeof files.$inferInsert //is to handled the types 'so when we push the data in db than it will help us'
