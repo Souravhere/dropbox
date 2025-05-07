@@ -27,3 +27,7 @@ export const files = pgTable("files",{
     updatedAt: timestamp("updated_at").defaultNow().notNull()
 
 })
+
+// export const fileRelations = relations(files,({one, many}) => ({
+
+// }))
