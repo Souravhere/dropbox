@@ -40,3 +40,5 @@ export const fileRelations = relations(files,({one, many}) => ({
     // there is multiple childers show this is here
     childern:many(files)
 }))
+
+export const File = typeof files.$inferSelect //is to handled the types 'so we don't need to write the types '
