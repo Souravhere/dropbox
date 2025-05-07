@@ -28,6 +28,15 @@ export const files = pgTable("files",{
 
 })
 
-// export const fileRelations = relations(files,({one, many}) => ({
+// build a relationship in tables 
+export const fileRelations = relations(files,({one, many}) => ({
+    // there is only one parent 
+    parent: one(files,{
+        fields: [files.parentId],
+        references:[files.id]
+    }),
 
-// }))
+    // relationship between child/folder
+    // there is multiple childers show this is here
+    childern:many(files)
+}))
