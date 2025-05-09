@@ -18,6 +18,9 @@ export const files = pgTable("files",{
     parentId: uuid("parent_id"), //if null for root items 
 
     // file / folders flags 
+    // 'is_folder' is defined the file in the folder 
+    // 'is_bookmarked' this flag is define the is file bookmarked 
+    // 'is_trash' this flag is define the is the current file will be removed or not 'and we are about to build the funcnality that the user will able to recover the file from the trash with in 30 days other ways the file will be removed'
     isFolder: boolean("is_folder").notNull().default(false),
     isBookmarked: boolean("is_bookmarked").default(false).notNull(),
     isTrash: boolean("is_trash").default(false).notNull(),
