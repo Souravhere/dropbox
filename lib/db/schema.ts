@@ -26,6 +26,7 @@ export const files = pgTable("files",{
     isTrash: boolean("is_trash").default(false).notNull(),
 
     //Time stamps
+    // these time stamps are stored the current created time/date and 'updateAt' it will update when the file is update
     createAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull()
 
