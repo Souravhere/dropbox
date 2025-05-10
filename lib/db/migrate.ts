@@ -1,56 +1,37 @@
-import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { migrate } from "drizzle-orm/neon-http/migrator";
+import { neon } from "@neondatabase/serverless";
 import * as dotenv from "dotenv";
-import * as fs from "fs";
-import * as path from "path";
 
+// Load environment variables from .env.local
 dotenv.config({ path: ".env" });
+
+// Validate environment variables
 if (!process.env.DATABASE_URL) {
-    throw new Error("Database URL is not set in .env");
+  throw new Error("DATABASE_URL is not set in .env.local");
 }
 
+// Main migration function
 async function runMigration() {
-    try {
-        // Setup directory structure if it doesn't exist
-        const drizzleDir = "./drizzle";
-        const metaDir = path.join(drizzleDir, "meta");
-        const journalPath = path.join(metaDir, "_journal.json");
-        
-        // Create directories if they don't exist
-        if (!fs.existsSync(drizzleDir)) {
-            console.log("Creating drizzle directory...");
-            fs.mkdirSync(drizzleDir);
-        }
-        
-        if (!fs.existsSync(metaDir)) {
-            console.log("Creating meta directory...");
-            fs.mkdirSync(metaDir);
-        }
-        
-        // Create initial journal file if it doesn't exist
-        if (!fs.existsSync(journalPath)) {
-            console.log("Creating initial journal file...");
-            const initialJournal = { 
-                "version": "5",
-                "dialect": "pg",
-                "entries": [] 
-            };
-            fs.writeFileSync(journalPath, JSON.stringify(initialJournal, null, 2));
-        }
+  console.log("🔄 Starting database migration...");
 
-        // Connect to the database and run migrations
-        const sql = neon(process.env.DATABASE_URL!);
-        const db = drizzle(sql);
-        
-        console.log("Running migrations...");
-        await migrate(db, { migrationsFolder: drizzleDir });
-        console.log("All migrations successfully done");
-        
-    } catch (error) {
-        console.error("All migrations failed:", error);
-        process.exit(1);
-    }
+  try {
+    // Create a Neon SQL connection
+    const sql = neon(process.env.DATABASE_URL!);
+
+    // Initialize Drizzle with the connection
+    const db = drizzle(sql);
+
+    // Run migrations from the drizzle folder
+    console.log("📂 Running migrations from ./drizzle folder");
+    await migrate(db, { migrationsFolder: "./drizzle" });
+
+    console.log("✅ Database migration completed successfully!");
+  } catch (error) {
+    console.error("❌ Migration failed:", error);
+    process.exit(1);
+  }
 }
 
+// Run the migration
 runMigration();
