@@ -14,3 +14,8 @@ export const signUpSchema = z
                 .string()
                 .min(1,{message:"Password is not matched"})
     })
+
+.refine((data) => data.password === data.passwordConformation, {
+    message:"Password is not match",
+    path:["passwordConformation"],
+});
